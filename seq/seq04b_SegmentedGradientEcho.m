@@ -8,7 +8,7 @@ seq=mr.Sequence(sys);           % Create a new sequence object
 fov=256e-3; Nx=128; Ny=128;     % Define FOV and resolution
 alpha=10;                       % flip angle
 sliceThickness=3e-3;            % slice
-TR=21e-3;                       % TR, a single value
+TR=30e-3;                       % TR, a single value
 TE=20e-3;                       % only a single TE is accepted now
 nSeg=5;                         % number of segments
 %TODO: increase nSeq, (remember to increase TE), see how we hit the "blip limit"
