@@ -36,6 +36,9 @@ The Dropbox repository entails following subdirectories:
 
 The raw data recorded during the session will be shared in real time. You are welcome to pull the data and experiment with them on your own. 
 
+If you would like your sequence tested in IDEA simulator or on the scanner (Siemens Prisma Fit), please upload your Pulseq files using the following Dropbox link: 
+https://www.dropbox.com/request/JXkmDIQPgsletXkOgg1u Please make sure to give your files unique and identifiable names.
+
 If you have any questions with regard to accessing the meeting materials do not hesitate to contact us directly. Alternatively you are welcome to post your questions in the session chat. 
 
 **See you at the live demo!**
