@@ -3,9 +3,8 @@
 % needs mapVBVD in the path
 
 %% Load the latest file from a dir
-path='../IceNIH_RawSend/'; % directory to be scanned for data files
-%path='~/Dropbox/shared/data/siemens/';
-%path='~/Downloads/2021-07-12-090810/';
+%path='../IceNIH_RawSend/'; % directory to be scanned for data files
+path='/storage/dropbox-pulseq/Dropbox/mriTogether_Pulseq_liveDemo/dataPrerecorded';
 pattern='*.seq';
 
 if path(end)~=filesep, path(end+1)=filesep; end

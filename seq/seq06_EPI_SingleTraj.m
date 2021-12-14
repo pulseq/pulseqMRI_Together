@@ -104,7 +104,7 @@ gy_traj=mr.makeArbitraryGrad('y',wave_y);
 
 % make new ADC
 adcDur=seq_d.duration-2*sys.adcDeadTime; % dead times at the beginning and at the end 
-adcSamplesPerSegment=100; % we need some "roundish" number of samples
+adcSamplesPerSegment=300; % we need some "roundish" number of samples
 adcNumSam=floor(adcDur/adc.dwell/adcSamplesPerSegment)*adcSamplesPerSegment; 
 adc_traj=mr.makeAdc(adcNumSam,'dwell',adc.dwell,'system',sys);
 

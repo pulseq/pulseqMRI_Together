@@ -3,22 +3,18 @@
 % needs mapVBVD in the path
 
 %% Load the latest file from a dir
-path='../IceNIH_RawSend/'; % directory to be scanned for data files
-%path='~/Dropbox/shared/data/siemens/';
-%path='~/Dropbox/shared/data/siemens/demo_epi/';
+%path='../IceNIH_RawSend/'; % directory to be scanned for data files
+%path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataPrerecorded';
+path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataLive';
+pattern='*.seq';
 
-pattern='/*.dat';
-
+if path(end)~=filesep, path(end+1)=filesep; end
 D=dir([path pattern]);
 [~,I]=sort([D(:).datenum]);
-data_file_path=[path D(I(end)).name]; % use end-1 to reconstruct the second-last data set, etc.
-%%
-twix_obj = mapVBVD(data_file_path);
 
-%% Load sequence from file (optional)
+seq_file_path=[path D(I(end-0)).name]; % use end-1 to reconstruct the second-last data set, etc.
 
-seq_file_path = [data_file_path(1:end-3) 'seq'];
-
+%% Load the Pulseq sequence from file
 seq = mr.Sequence();              % Create a new sequence object
 seq.read(seq_file_path,'detectRFuse');
 [ktraj_adc, t_adc, ktraj, t_ktraj, t_excitation, t_refocusing] = seq.calculateKspacePP();
@@ -26,8 +22,15 @@ seq.read(seq_file_path,'detectRFuse');
 figure; plot(ktraj(1,:),ktraj(2,:),'b',...
              ktraj_adc(1,:),ktraj_adc(2,:),'r.'); % a 2D plot
 axis('equal');
+title('EPI k-space trajectory');
 
-%% define raw data
+%% keep basic filename without the extension and prepare data path
+[p,n,e] = fileparts(seq_file_path);
+basic_file_path=fullfile(p,n);
+data_file_path=[basic_file_path '.dat'];
+
+%% load and prepare raw data
+twix_obj = mapVBVD(data_file_path);
 
 if iscell(twix_obj)
     rawdata = double(twix_obj{end}.image.unsorted());
@@ -36,7 +39,7 @@ else
 end
 
 %% if necessary re-tune the trajectory delay to supress ghosting
-traj_recon_delay=-3.7e-6;%3.23e-6;%-1e-6;%3.90e-6;%-1.03e-6; % adjust this parameter to supress ghosting (negative allowed) (our trio -1.0e-6, prisma +3.9e-6; avanto +3.88)
+traj_recon_delay=0e-6;%3.23e-6;%-1e-6;%3.90e-6;%-1.03e-6; % adjust this parameter to supress ghosting (negative allowed) (our trio -1.0e-6, prisma +3.9e-6; avanto +3.88)
 [ktraj_adc, t_adc, ktraj, t_ktraj, t_excitation, t_refocusing] = seq.calculateKspacePP('trajectory_delay', traj_recon_delay);
 %[ktraj_adc, ktraj, t_excitation, t_refocusing, t_adc] = seq.calculateKspace('trajectory_delay', traj_recon_delay);
 %ktraj_adc_nodelay=seq.calculateKspace('trajectory_delay', 10e-6);
@@ -116,8 +119,9 @@ for a=1:nAcq
 end
 
 figure;imagesc(squeeze(abs(data_resampled(:,1,:)))');axis('square');
+title('EPI k-space data');
 
-%% in some cases because of the incorrectly calculated trajectory phase correction may be needed
+%% in some cases (e.g. because of the incorrectly calculated trajectory) phase correction may be needed
 %  one such case is the use of the frequency shift proportional to gradient
 %  in combination with the gradient delay and FOV offset in the RO direction
 %  this calculation is best done with the calibration data, but also seems
@@ -143,6 +147,7 @@ for c=1:nCoils
     end
 end
 figure;imagesc(squeeze(angle(data_pc(:,1,:)))');axis('square');
+title('phase of hybrid (x/ky) data');
 
 %% reshape for multiple slices or repetitions
 n4 = nAcq / Ny_sampled;
@@ -167,9 +172,11 @@ end
 
 data_xy=ifftshift(ifft(ifftshift(data_xky,3),[],3),3);
 
-%%
-if delta_ky>0
-    figure;imab(sqrt(squeeze(sum(abs(data_xy(:,:,end:-1:1,:).^2),2))));axis('square');colormap('gray'); 
-else
-    figure;imab(sqrt(squeeze(sum(abs(data_xy(:,:,:,:).^2),2))));axis('square');colormap('gray');
-end
+% account for the matlab's strange convention with data dimensions
+data_xy=flip(data_xy,1); % left-right orientation, works on TRIO
+if delta_ky>0, data_xy=flip(data_xy,3); end
+
+%% show image(s)
+figure;imab(sqrt(squeeze(sum(abs(data_xy(:,:,:,:).^2),2))));axis('square');colormap('gray');
+title('image(s), EPI recon');
+saveas(gcf,[basic_file_path '_image_2depi'],'png');

@@ -9,8 +9,9 @@
 %     the data
 
 %% Load the latest file from the specified directory
-path='../IceNIH_RawSend/'; % directory to be scanned for data files
-%path='/data/Dropbox/ismrm2021pulseq_liveDemo/dataLive/Vienna_7T_Siemens'; % directory to be scanned for data files
+%path='../IceNIH_RawSend/'; % directory to be scanned for data files
+%path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataPrerecorded';
+path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataLive';
 
 if path(end)~=filesep, path=[path filesep]; end
 
@@ -19,12 +20,11 @@ D=dir([path pattern]);
 [~,I]=sort([D(:).datenum]);
 seq_file_path=[path D(I(end-0)).name]; % use end-1 to reconstruct the second-last data set, etc...
                                                 % or replace I(end-0) with I(1) to process the first dataset, I(2) for the second, etc...
-%seq_file_path='../interpreters/siemens/data_example/gre_example.seq'
-
 % keep basic filename without the extension
 [p,n,e] = fileparts(seq_file_path);
 basic_file_path=fullfile(p,n);
 
+%% load raw data
 % try loading Matlab data
 data_file_path=[basic_file_path '.mat'];
 if isfile(data_file_path)
