@@ -1,7 +1,7 @@
 ![Pulseq live demo at MRI Together banner](mri_together_esmrmb_banner.png)
 # Pulseq Live Demo at MRI Together 2021
 
-Welcome to the *Pulseq* live demo repository! This repository contain all supplementary materials and links to raw data necessary to fully appreciate the live Pulseq software demonstration and hands-on session at **19:15 UTC on Wednesday December 15, 2021**. 
+Welcome to the *Pulseq* live demo repository! This repository contain all supplementary materials and links to raw data necessary to fully appreciate the live Pulseq software demonstration and hands-on session at **07:15 UTC on Wednesday December 15, 2021**. 
 
 ## Quick links:
 
