@@ -42,10 +42,10 @@ gxSpoil=mr.makeTrapezoid('x','Area',2*Nx*deltak*spSign,'system',sys);      % 2 c
 gzSpoil=mr.makeTrapezoid('z','Area',4/sliceThickness,'system',sys); % 4 cycles over the slice thickness
 
 % Calculate timing (need to decide on the block structure already)
-delayTE=TE - ceil((gz.fallTime + gz.flatTime/2 + nSeg*mr.calcDuration(gxp)/2)/seq.gradRasterTime)*seq.gradRasterTime;
+delayTE=TE - ceil((gz.fallTime + gz.flatTime/2 + floor(nSeg/2)*mr.calcDuration(gx,gyBlip)+mr.calcDuration(gx)/2)/seq.gradRasterTime)*seq.gradRasterTime;
 assert(all(delayTE>=mr.calcDuration(gxPre,gzReph)));
-delayTR=ceil((TR - mr.calcDuration(gz) - sum(delayTE) ...
-    - mr.calcDuration(gxp)*length(TE))/seq.gradRasterTime)*seq.gradRasterTime;
+delayTR=round((TR - mr.calcDuration(gz) - delayTE ...
+    - mr.calcDuration(gx,gyBlip)*(nSeg-1)-mr.calcDuration(gx))/seq.gradRasterTime)*seq.gradRasterTime;
 assert(all(delayTR>=mr.calcDuration(gxSpoil,gzSpoil)));
 
 % initialize the RF spoling counters 

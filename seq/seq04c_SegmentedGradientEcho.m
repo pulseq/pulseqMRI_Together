@@ -8,8 +8,8 @@ seq=mr.Sequence(sys);           % Create a new sequence object
 fov=256e-3; Nx=128; Ny=Nx;     % Define FOV and resolution
 alpha=90;                       % flip angle
 sliceThickness=3e-3;            % slice
-TR=21e-3;                       % TR, a single value
-TE=60e-3;                        % only a single TE is accepted now
+TR=130e-3;                       % TR, a single value
+TE=61e-3;                        % only a single TE is accepted now
 nSeg=Ny;                         % number of segments, noy equals to the number of PE lines
 % run this imprvised EPI sequence with and without PE, have a look a the k-space 
 
@@ -63,11 +63,10 @@ gxSpoil=mr.makeTrapezoid('x','Area',2*Nx*deltak*spSign,'system',sys);      % 2 c
 gzSpoil=mr.makeTrapezoid('z','Area',4/sliceThickness,'system',sys); % 4 cycles over the slice thickness
 
 % Calculate timing (need to decide on the block structure already)
-delayTE=TE - ceil((gz.fallTime + gz.flatTime/2 + nSeg*mr.calcDuration(gxp)/2)/seq.gradRasterTime)*seq.gradRasterTime;
+delayTE=TE - ceil((gz.fallTime + gz.flatTime/2 + (floor(nSeg/2)+0.5)*mr.calcDuration(gxp0) + floor((nSeg-1)/2)*gxp.delay)/seq.gradRasterTime)*seq.gradRasterTime;
 assert(all(delayTE>=mr.calcDuration(gxPre,gzReph)));
-warning('TR is wrong, needs checking')
-delayTR=ceil((TR - mr.calcDuration(gz) - sum(delayTE) ...
-    - mr.calcDuration(gxp)*length(TE))/seq.gradRasterTime)*seq.gradRasterTime;
+delayTR=round((TR - mr.calcDuration(gz) - delayTE ...
+    - nSeg*mr.calcDuration(gxp0) - floor((nSeg-1)/2)*gxp.delay)/seq.gradRasterTime)*seq.gradRasterTime;
 assert(all(delayTR>=mr.calcDuration(gxSpoil,gzSpoil)));
 
 % initialize the RF spoling counters 

@@ -42,7 +42,7 @@ for c=1:length(TE)
 end
 assert(all(delayTE(1)>=mr.calcDuration(gxPre,gzReph)));
 assert(all(delayTE(2:end)>=0));
-delayTR=ceil((TR - mr.calcDuration(gz) - sum(delayTE) ...
+delayTR=round((TR - mr.calcDuration(gz) - sum(delayTE) ...
     - mr.calcDuration(gxp)*length(TE))/seq.gradRasterTime)*seq.gradRasterTime;
 assert(all(delayTR>=mr.calcDuration(gxSpoil,gzSpoil)));
 

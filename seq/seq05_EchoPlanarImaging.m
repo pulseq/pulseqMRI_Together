@@ -78,7 +78,7 @@ gyPre=mr.scaleGrad(gyPre,pe_enable);
 % gradient spoiling
 gzSpoil=mr.makeTrapezoid('z','Area',4/sliceThickness,'system',sys); % 4 cycles over the slice thickness
 
-% skip timing (TE/TR calculation), we"ll accept the shortest TE/TR
+% skip timing (TE/TR calculation), we'll accept the shortest TE/TR
 
 % define sequence blocks
 seq.addBlock(rf,gz);
