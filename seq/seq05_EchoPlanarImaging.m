@@ -19,6 +19,9 @@ pe_enable=1;                    % a flag to quickly disable phase encoding (1/0)
 rfDuration=3e-3;
 roDuration=640e-6;              % not all values are possible, watch out for the checkTiming output
 
+seq.addBlock(mr.makeDelay(1)); % older scanners like Trio may need this
+                                % dummy delay to keep up with timing
+
 % Create alpha-degree slice selection pulse and corresponding gradients 
 [rf, gz, gzReph] = mr.makeSincPulse(alpha*pi/180,'Duration',rfDuration,...
     'SliceThickness',sliceThickness,'apodization',0.42,'timeBwProduct',4,'system',sys);

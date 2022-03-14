@@ -86,8 +86,8 @@ end
 
 %% prepare sequence export
 seq.setDefinition('FOV', [fov fov sliceThickness]);
-seq.setDefinition('Name', 'gre');
-seq.write('gre.seq')       % Write to pulseq file
+seq.setDefinition('Name', 'mgre');
+seq.write('mgre.seq')       % Write to pulseq file
 %seq.install('siemens');
 
 %% plot sequence and k-space diagrams

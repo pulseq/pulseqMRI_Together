@@ -128,9 +128,9 @@ end
 
 %% prepare sequence export
 seq_r.setDefinition('FOV', [fov fov sliceThickness]);
-seq_r.setDefinition('Name', 'epi');
+seq_r.setDefinition('Name', 'epi-st');
 seq_r.setDefinition('MaxAdcSegmentLength', adcSamplesPerSegment);
-seq_r.write('epi.seq')       % Write to pulseq file
+seq_r.write('epi-st.seq')       % Write to pulseq file
 %seq_r.install('siemens');
 
 %% plot sequence and k-space diagrams
