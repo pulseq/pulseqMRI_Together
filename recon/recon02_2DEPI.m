@@ -5,10 +5,11 @@
 %% Load the latest file from a dir
 %path='../IceNIH_RawSend/'; % directory to be scanned for data files
 %path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataPrerecorded';
-path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataLive';
-pattern='*.seq';
+%path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataLive';
+path='/ad/O/Teaching/Pulseq_Tutorials/tutorial_fromGRE_toEPI/data';
 
 if path(end)~=filesep, path(end+1)=filesep; end
+pattern='*.seq';
 D=dir([path pattern]);
 [~,I]=sort([D(:).datenum]);
 
@@ -17,6 +18,8 @@ seq_file_path=[path D(I(end-0)).name]; % use end-1 to reconstruct the second-las
 %% Load the Pulseq sequence from file
 seq = mr.Sequence();              % Create a new sequence object
 seq.read(seq_file_path,'detectRFuse');
+seqName=seq.getDefinition('Name');
+if ~isempty(seqName), fprintf('sequence name: %s\n',seqName); end
 [ktraj_adc, t_adc, ktraj, t_ktraj, t_excitation, t_refocusing] = seq.calculateKspacePP();
 %[ktraj_adc, ktraj, t_excitation, t_refocusing] = seq.calculateKspace();
 figure; plot(ktraj(1,:),ktraj(2,:),'b',...

@@ -4,10 +4,11 @@
 
 %% Load the latest file from a dir
 %path='../IceNIH_RawSend/'; % directory to be scanned for data files
-path='/storage/dropbox-pulseq/Dropbox/mriTogether_Pulseq_liveDemo/dataPrerecorded';
-pattern='*.seq';
+%path='/storage/dropbox-pulseq/Dropbox/mriTogether_Pulseq_liveDemo/dataPrerecorded';
+path='/ad/O/Teaching/Pulseq_Tutorials/tutorial_fromGRE_toEPI/data';
 
 if path(end)~=filesep, path(end+1)=filesep; end
+pattern='*.seq';
 D=dir([path pattern]);
 [~,I]=sort([D(:).datenum]);
 seq_file_path = [path D(I(end-0)).name]; % use end-1 to reconstruct the second-last data set, etc.
@@ -58,6 +59,8 @@ grad_offsets=[0 0 0];
 
 seq = mr.Sequence();              % Create a new sequence object
 seq.read(seq_file_path,'detectRFuse');
+seqName=seq.getDefinition('Name');
+if ~isempty(seqName), fprintf('sequence name: %s\n',seqName); end
 %[ktraj_adc, ktraj, t_excitation, t_refocusing, t_adc] = seq.calculateKspace('trajectory_delay', traj_recon_delay);
 [ktraj_adc, t_adc, ktraj, t_ktraj, t_excitation, t_refocusing] = seq.calculateKspacePP('trajectory_delay', traj_recon_delay, 'gradient_offset', grad_offsets);
 figure; plot(ktraj(1,:),ktraj(2,:),'b',...
@@ -144,7 +147,7 @@ for s=1:Ns
 end
 kgd(isnan(kgd))=0;
 
-figure;imagesc(log(abs(kgd(:,:,1,1))));axis('square');
+figure;imagesc(log(abs(kgd(:,:,1,1)))');axis('square');
 title('2D k-space data, ch1 as log(abs())');
 
 igd=ifftshift(ifft2(ifftshift(kgd)));

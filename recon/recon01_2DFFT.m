@@ -11,7 +11,8 @@
 %% Load the latest file from the specified directory
 %path='../IceNIH_RawSend/'; % directory to be scanned for data files
 %path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataPrerecorded';
-path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataLive';
+%path='/data/Dropbox/mriTogether_Pulseq_liveDemo/dataLive';
+path='/ad/O/Teaching/Pulseq_Tutorials/tutorial_fromGRE_toEPI/data';
 
 if path(end)~=filesep, path=[path filesep]; end
 
@@ -57,6 +58,8 @@ end
 fprintf(['loading `' seq_file_path '´ ...\n']);
 seq = mr.Sequence();              % Create a new sequence object
 seq.read(seq_file_path,'detectRFuse');
+seqName=seq.getDefinition('Name');
+if ~isempty(seqName), fprintf('sequence name: %s\n',seqName); end
 [ktraj_adc, t_adc, ktraj, t_ktraj, t_excitation, t_refocusing] = seq.calculateKspacePP();
 figure; plot(ktraj(1,:),ktraj(2,:),'b',...
              ktraj_adc(1,:),ktraj_adc(2,:),'r.'); % a 2D plot
